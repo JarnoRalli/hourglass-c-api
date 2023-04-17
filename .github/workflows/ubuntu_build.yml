@@ -1,0 +1,89 @@
+name: Linux
+on: [pull_request, workflow_dispatch]
+
+jobs:
+  #---LINUX BUILD JOB(S)---
+  linux:
+    name: ${{ matrix.config.name }}
+    runs-on: ubuntu-latest
+    container: ubuntu:20.04
+    env:
+      DEBIAN_FRONTEND: "noninteractive"
+      hourglass_build_type: "Release"
+      hourglass_conan_path: "$HOME/.local/bin"
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {
+            name: "Ubuntu GCC",
+            cc: "gcc", cxx: "g++",
+          }
+
+    steps:
+      - name: Update environment
+        shell: bash
+        run: |
+          # Update package lists
+          apt update -qq
+          # Add Kitware APT repository in order to use new version of CMake
+          apt install -y gpg wget
+          wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null
+          echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ focal main' | tee /etc/apt/sources.list.d/kitware.list >/dev/null
+          apt update -qq
+          rm /usr/share/keyrings/kitware-archive-keyring.gpg
+          apt install -y kitware-archive-keyring
+          # Install build tools
+          apt install -y \
+            clang \
+            cmake \
+            curl \
+            lld \
+            ninja-build \
+            pkg-config \
+            python3 \
+            python3-pip \
+            git \
+            libgtk2.0-dev \
+            libva-dev \
+            libvdpau-dev
+
+      #Output CMake version
+      - name: Output CMake version
+        shell: bash
+        run: |
+          cmake --version
+      
+      #Checks out the repo
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Libstoryboard - Configure CMake
+        shell: bash
+        run: |
+          export CC=${{ matrix.config.cc }}
+          export CXX=${{ matrix.config.cxx }}
+          export PATH="${{ env.hourglass_conan_path }}":$PATH
+
+          # Configure cmake
+          cd libstoryboard
+          mkdir build
+          cd build
+          echo "Current directory: $(pwd)"
+          cmake .. \
+            -DCMAKE_BUILD_TYPE=${{ env.hourglass_build_type }} \
+            -GNinja \
+            ${{ matrix.config.cmake_configure_options }}
+
+      - name: Libstoryboard - build
+        shell: bash
+        run: |
+          cmake --build libstoryboard/build
+
+      - name: Libstoryboard - Run tests
+        shell: bash
+        run: |
+          cd libstoryboard
+          cd build
+          ctest --verbose -C ${{ env.hourglass_build_type }}
+

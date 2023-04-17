@@ -1,0 +1,33 @@
+name: Code Style
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  clang-format:
+    name: Clang Format
+    runs-on: ubuntu-latest
+    container: ubuntu:20.04
+    env:
+      DEBIAN_FRONTEND: "noninteractive"
+    steps:
+      - name: Update environment
+        shell: bash
+        run: |
+          # Update package lists
+          apt update -qq
+          # Install tools
+          apt install -y \
+            clang-format \
+            git
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Style check
+        shell: bash
+        run: |
+          find . \( -iname '*.hpp' -o -iname '*.h' -o -iname '*.cpp' -o -iname '*.c' \) -not -path "./build/*" | xargs clang-format --dry-run --Werror
+
