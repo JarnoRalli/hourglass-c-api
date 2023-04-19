@@ -37,6 +37,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      # Build, test and install LibStoryBoard
       - name: Libstoryboard - Configure CMake
         shell: pwsh
         run: |
@@ -44,10 +45,8 @@ jobs:
           $env:CXX="${{ matrix.config.cxx }}"
 
           # Configure CMake
-          cd libstoryboard
-          mkdir build
-          cd build
-          cmake .. ${{ matrix.config.cmake_configure_options }}
+          mkdir libstoryboard/build
+          cmake ${{ matrix.config.cmake_configure_options }} --install-prefix $pwd/install -S libstoryboard -B libstoryboard/build
 
       - name: Libstoryboard - Build
         shell: pwsh
@@ -61,3 +60,23 @@ jobs:
           cd build
           ctest --verbose -C ${{ env.hourglass_build_type }}
 
+      - name: Libstoryboard - Install
+        shell: pwsh
+        run: |
+          cmake --install libstoryboard/build
+
+      # Build, test and install C-executable
+      - name: C-executable - Configure CMake
+        shell: pwsh
+        run: |
+          $env:CC="${{ matrix.config.cc }}"
+          $env:CXX="${{ matrix.config.cxx }}"
+
+          # Configure CMake
+          mkdir c_executable/build
+          cmake ${{ matrix.config.cmake_configure_options }} -D LibStoryBoard_DIR=$pwd/install/lib/cmake/LibStoryBoard -S c_executable -B c_executable/build
+
+      - name: C-executable - Build
+        shell: pwsh
+        run: |
+          cmake --build c_executable/build --config ${{ env.hourglass_build_type }}

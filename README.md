@@ -1,3 +1,5 @@
+![Linux](https://github.com/JarnoRalli/hourglass-c-api/actions/workflows/linux_build.yml/badge.svg)   ![Windows](https://github.com/JarnoRalli/hourglass-c-api/actions/workflows/windows_build.yml/badge.svg)   ![Code style](https://github.com/JarnoRalli/hourglass-c-api/actions/workflows/code_style.yml/badge.svg)
+
 # Hourglass C-API
 
 This repository showcases a pattern/technique called *Hourglass* for implementing a C-API for C++ libraries. Since C++ lacks an ABI (Application Binary Interface),

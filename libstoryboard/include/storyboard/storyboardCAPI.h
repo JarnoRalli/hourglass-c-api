@@ -101,7 +101,7 @@ typedef void (*note_query_handler)(void* client_data, const char* tag);
  * @return
  */
 STORYBOARD_EXPORT
-void note_get_tags(const note_t note_in, note_query_handler handler, void* client_data, error_t_* out_error);
+int32_t note_get_tags(const note_t note_in, note_query_handler handler, void* client_data, error_t_* out_error);
 
 // --- Storyboard ---
 typedef struct board* board_t;
@@ -165,14 +165,14 @@ typedef void (*storyboard_query_handler)(void* client_data, const char* title, c
 /**
  * @brief Search notes based on the title
  * @param[in] board_in : board that is being queried
- * @param[in] name : title/name being queried
+ * @param[in] title : title/name being queried
  * @param[in] handler : query handler
  * @param[in] client_data : client data that is passed to the query handler
  * @param[in, out] out_error : error object
  * @return
  */
 STORYBOARD_EXPORT
-int32_t storyboard_search_by_title(const board_t board_in, const char* name, storyboard_query_handler handler,
+int32_t storyboard_search_by_title(const board_t board_in, const char* title, storyboard_query_handler handler,
                                    void* client_data, error_t_* out_error);
 
 /**

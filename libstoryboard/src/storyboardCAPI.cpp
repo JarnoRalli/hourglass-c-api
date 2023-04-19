@@ -158,12 +158,12 @@ const char* note_get_text(const note_t note_in, error_t_* out_error)
     return note_in->actual.getText().c_str();
 }
 
-void note_get_tags(const note_t note_in, note_query_handler handler, void* client_data, error_t_* out_error)
+int32_t note_get_tags(const note_t note_in, note_query_handler handler, void* client_data, error_t_* out_error)
 {
     if (!note_in)
     {
         *out_error = new error{"note_in not initialized"};
-        return;
+        return 0;
     }
 
     translateExceptions(out_error, [&] {
@@ -174,6 +174,8 @@ void note_get_tags(const note_t note_in, note_query_handler handler, void* clien
             handler(client_data, elem.c_str());
         }
     });
+
+    return note_in->actual.getTags().size();
 }
 
 board_t storyboard_construct(error_t_* out_error)
@@ -243,7 +245,7 @@ int32_t storyboard_delete_note(board_t board_in, const note_t note_in, error_t_*
     return nr_deleted_items;
 }
 
-int32_t storyboard_search_by_title(const board_t board_in, const char* name, storyboard_query_handler handler,
+int32_t storyboard_search_by_title(const board_t board_in, const char* title, storyboard_query_handler handler,
                                    void* client_data, error_t_* out_error)
 {
     int nr_results = 0;
@@ -254,7 +256,7 @@ int32_t storyboard_search_by_title(const board_t board_in, const char* name, sto
         return nr_results;
     }
 
-    if (!name)
+    if (!title)
     {
         *out_error = new error{"name not initialized"};
         return nr_results;
@@ -262,7 +264,7 @@ int32_t storyboard_search_by_title(const board_t board_in, const char* name, sto
 
     translateExceptions(out_error, [&] {
         storyboard::note_cont_t query_result;
-        board_in->actual.searchByTitle(std::string(name), query_result);
+        board_in->actual.searchByTitle(std::string(title), query_result);
 
         nr_results = query_result.size();
 

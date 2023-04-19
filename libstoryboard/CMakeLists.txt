@@ -65,7 +65,7 @@ list(   APPEND
 add_library(LibStoryBoard SHARED)
 
 # Compile features for the target
-target_compile_features(LibStoryBoard PUBLIC cxx_std_14)
+target_compile_features(LibStoryBoard PRIVATE cxx_std_14)
 # If not Visual Studio, make all symbols hidden
 if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_compile_options(LibStoryBoard PRIVATE -fvisibility=hidden)
