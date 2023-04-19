@@ -1,0 +1,82 @@
+name: Win64
+on: [pull_request, workflow_dispatch]
+
+jobs:
+  #---WINDOWS BUILD JOB(S)---
+  windows:
+    name: ${{ matrix.config.name }}
+    runs-on: windows-2019
+    env:
+      hourglass_build_type: "Release"
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {
+            name: "Windows MSVC",
+            cc: "cl", cxx: "cl",
+            cmake_configure_options: '-G "Visual Studio 16 2019" -A x64',
+          }
+
+    steps:
+    
+      #Install cmake using chocolatey
+      - name: Install cmake
+        shell: cmd
+        run: |
+          choco install cmake
+          refreshenv
+
+      #Output CMake version
+      - name: Output CMake version
+        shell: cmd
+        run: |
+          cmake --version
+
+      #Checks out the repo
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Build, test and install LibStoryBoard
+      - name: Libstoryboard - Configure CMake
+        shell: pwsh
+        run: |
+          $env:CC="${{ matrix.config.cc }}"
+          $env:CXX="${{ matrix.config.cxx }}"
+
+          # Configure CMake
+          mkdir libstoryboard/build
+          cmake ${{ matrix.config.cmake_configure_options }} --install-prefix $pwd/install -S libstoryboard -B libstoryboard/build
+
+      - name: Libstoryboard - Build
+        shell: pwsh
+        run: |
+          cmake --build libstoryboard/build --config ${{ env.hourglass_build_type }}
+
+      - name: Libstoryboard - Run tests
+        shell: pwsh
+        run: |
+          cd libstoryboard
+          cd build
+          ctest --verbose -C ${{ env.hourglass_build_type }}
+
+      - name: Libstoryboard - Install
+        shell: pwsh
+        run: |
+          cmake --install libstoryboard/build
+
+      # Build, test and install C-executable
+      - name: C-executable - Configure CMake
+        shell: pwsh
+        run: |
+          $env:CC="${{ matrix.config.cc }}"
+          $env:CXX="${{ matrix.config.cxx }}"
+
+          # Configure CMake
+          mkdir c_executable/build
+          cmake ${{ matrix.config.cmake_configure_options }} -D LibStoryBoard_DIR=$pwd/install/lib/cmake/LibStoryBoard -S c_executable -B c_executable/build
+
+      - name: C-executable - Build
+        shell: pwsh
+        run: |
+          cmake --build c_executable/build --config ${{ env.hourglass_build_type }}
