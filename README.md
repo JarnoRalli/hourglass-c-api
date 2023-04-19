@@ -1,4 +1,4 @@
-![Linux](https://github.com/JarnoRalli/hourglass-c-api/actions/workflows/linux_build.yml/badge.svg)   ![Windows](https://github.com/JarnoRalli/hourglass-c-api/actions/workflows/windows_build.yml/badge.svg)   ![Code style](https://github.com/JarnoRalli/hourglass-c-api/actions/workflows/code_style.yml/badge.svg)
+![Linux](https://github.com/JarnoRalli/hourglass-c-api/actions/workflows/ubuntu_build.yml/badge.svg)   ![Windows](https://github.com/JarnoRalli/hourglass-c-api/actions/workflows/visual_studio_build.yml/badge.svg)   ![Code style](https://github.com/JarnoRalli/hourglass-c-api/actions/workflows/code_style.yml/badge.svg)
 
 # Hourglass C-API
 
