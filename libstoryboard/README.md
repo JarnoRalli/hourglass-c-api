@@ -6,18 +6,16 @@ that can be linked against in another project in order to get access to the `Sto
 
 # Building and Installing
 
-The library needs to be built and installed before it can be used in another project. Following commands build- and
-install the library, and execute the tests.
+The library needs to be built and installed before it can be used in another project. Following commands build, test
+and installs the library. The library is installed to `build/install` directory.
 
 ```bash
-cd libstorybuild
+cd libstoryboard
 mkdir build
 cd build
-conan install ../conan -s build_type=Release --build=missing
-mkdir install
 cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=./install
-make -j4
-make install
-make test
+cmake --build .
+ctest -C Release
+cmake --install .
 ```
 
