@@ -13,7 +13,7 @@ jobs:
       matrix:
         config:
           - {
-            name: "Windows MSVC",
+            name: "Windows Visual Studio",
             cc: "cl", cxx: "cl",
             cmake_configure_options: '-G "Visual Studio 16 2019" -A x64',
           }
@@ -66,7 +66,7 @@ jobs:
           cmake --install libstoryboard/build
 
       # Build, test and install C-executable
-      - name: C-executable - Configure CMake
+      - name: C executable - Configure CMake
         shell: pwsh
         run: |
           $env:CC="${{ matrix.config.cc }}"
@@ -76,7 +76,23 @@ jobs:
           mkdir c_executable/build
           cmake ${{ matrix.config.cmake_configure_options }} -D LibStoryBoard_DIR=$pwd/install/lib/cmake/LibStoryBoard -S c_executable -B c_executable/build
 
-      - name: C-executable - Build
+      - name: C executable - Build
         shell: pwsh
         run: |
           cmake --build c_executable/build --config ${{ env.hourglass_build_type }}
+
+      # Build, test and install C-executable
+      - name: C++ executable - Configure CMake
+        shell: pwsh
+        run: |
+          $env:CC="${{ matrix.config.cc }}"
+          $env:CXX="${{ matrix.config.cxx }}"
+
+          # Configure CMake
+          mkdir cpp_executable/build
+          cmake ${{ matrix.config.cmake_configure_options }} -D LibStoryBoard_DIR=$pwd/install/lib/cmake/LibStoryBoard -S cpp_executable -B cpp_executable/build
+
+      - name: C++ executable - Build
+        shell: pwsh
+        run: |
+          cmake --build cpp_executable/build --config ${{ env.hourglass_build_type }}

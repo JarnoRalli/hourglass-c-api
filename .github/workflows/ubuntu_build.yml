@@ -93,7 +93,7 @@ jobs:
           cmake --install libstoryboard/build
 
       # Build, test and install C-executable
-      - name: C-executable - Configure CMake
+      - name: C executable - Configure CMake
         shell: bash
         run: |
           export CC=${{ matrix.config.cc }}
@@ -114,3 +114,26 @@ jobs:
         shell: bash
         run: |
           cmake --build c_executable/build
+
+      # Build, test and install C++ executable
+      - name: C++ executable - Configure CMake
+        shell: bash
+        run: |
+          export CC=${{ matrix.config.cc }}
+          export CXX=${{ matrix.config.cxx }}
+          export PATH="${{ env.hourglass_conan_path }}":$PATH
+
+          # Configure cmake
+          mkdir -p cpp_executable/build
+          
+          echo "Current directory: $(pwd)"
+          cmake \
+            -D CMAKE_BUILD_TYPE=${{ env.hourglass_build_type }} \
+            -D LibStoryBoard_DIR=$(pwd)/install/lib/cmake/LibStoryBoard \
+            -G Ninja \
+            -S cpp_executable -B cpp_executable/build
+
+      - name: C++ executable - build
+        shell: bash
+        run: |
+          cmake --build cpp_executable/build
