@@ -13,7 +13,7 @@ using note_cont_t = std::vector<Note>;
 
 /**
  * @class Note
- * @brief Simple note-object
+ * @brief A Note object that has a title, text and a container that can have several tags.
  */
 class Note
 {
@@ -45,18 +45,18 @@ public:
 
     /**
      * @brief Returns a container with the note's tags
-     * @return std-container that contains the note's tags
+     * @return std-container that contains the Note's tags
      */
     tag_cont_t& getTags();
 
     /**
-     * @brief Returns title
+     * @brief Returns Note's title
      * @return String containing the note's title
      */
     std::string& getTitle();
 
     /**
-     * @brief Returns text
+     * @brief Returns Note's text
      * @return String containing the note's text
      */
     std::string& getText();
@@ -78,7 +78,7 @@ protected:
 
 /**
  * @class Storyboard
- * @brief An object that contains Note objects.
+ * @brief Storyboard is an object that contains  one or more Note objects.
  * @details Has functionality for adding, deleting and searching for Note objects.
  */
 class Storyboard
