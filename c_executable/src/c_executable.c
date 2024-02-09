@@ -39,7 +39,7 @@ void print_notes(void* client_data, const char* title, const char* text, const c
 // A function that is called for each tag
 void query_tags(void* client_data, const char* tag)
 {
-    printf("%s ", tag);
+    printf("Tag: %s\n", tag);
 }
 
 int main(int argc, char* argv[])
@@ -54,6 +54,12 @@ int main(int argc, char* argv[])
 
     note_t my_note2 = note_construct("title2", "text hei hello hola", tags2, NR_TAGS, &my_error);
     assert_error(my_error);
+
+    // Query my_note2 for tags
+    printf("QUERY MY_NOTE2 FOR TAGS\n");
+    note_get_tags(my_note2, query_tags, NULL, &my_error);
+    assert_error(my_error);
+    printf("-------------\n");
 
     // Create a board where to store the notes
     board_t my_board = storyboard_construct(&my_error);

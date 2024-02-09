@@ -8,44 +8,48 @@
 extern "C" {
 #endif
 
+//-----------------------
 // --- Error handling ---
+//-----------------------
 typedef struct error* error_t_;
 
 /**
- * @brief
+ * @brief Returns error message of the @error_t_ object
  * @param[in, out] out_error : error object
- * @return
+ * @return Pointer to the error message
  */
 STORYBOARD_EXPORT
 const char* error_message(error_t_ error);
 
 /**
- * @brief
+ * @brief Deletes the error object
  * @param[in, out] out_error : error object
- * @return
+ * @return nullptr
  */
 STORYBOARD_EXPORT
 error_t_ error_destruct(error_t_ error);
 
 /**
- * @brief
+ * @brief Returns error message of the @error_t_ object
  * @param[in, out] out_error : error object
- * @return
+ * @return Pointer to the error message
  */
 STORYBOARD_EXPORT
 const char* error_get_string(error_t_ error);
 
+//-------------
 // --- Note ---
+//-------------
 typedef struct note* note_t;
 
 /**
- * @brief Construct a new note
+ * @brief Constructs a new note
  * @param[in] title : Title of the note
  * @param[in] text : Text of the note
  * @param[in] tags : Tags for the note
  * @param[in] nr_tags : Number of tags being passed
  * @param[in, out] out_error : error object
- * @return a new note object
+ * @return a new @note_t object
  */
 STORYBOARD_EXPORT
 note_t note_construct(const char* title, const char* text, const char* tags[], int32_t nr_tags, error_t_* out_error);
@@ -86,7 +90,7 @@ STORYBOARD_EXPORT
 const char* note_get_text(const note_t note_in, error_t_* out_error);
 
 /**
- * @brief Note query handler type. Used for querieng note's tags
+ * @brief Note query handler type. Used for querying note's tags.
  * @param[in] client_data : void pointer to client data object that is passed to the handler
  * @param[in] tag : Tag of the note
  */
@@ -94,6 +98,7 @@ typedef void (*note_query_handler)(void* client_data, const char* tag);
 
 /**
  * @brief Get note's tags
+ * @details The handler function pointer is called for each tag in the note_in.
  * @param[in] note_in : note being queried
  * @param[in] handler : query handler function
  * @param[in] client_data : void pointer passed to the handler function
@@ -103,7 +108,9 @@ typedef void (*note_query_handler)(void* client_data, const char* tag);
 STORYBOARD_EXPORT
 int32_t note_get_tags(const note_t note_in, note_query_handler handler, void* client_data, error_t_* out_error);
 
+//-------------------
 // --- Storyboard ---
+//-------------------
 typedef struct board* board_t;
 
 /**

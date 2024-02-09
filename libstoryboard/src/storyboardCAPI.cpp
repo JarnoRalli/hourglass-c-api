@@ -5,7 +5,9 @@
 #include <algorithm>
 #include <iostream>
 
+//------------------
 // --- C linkage ---
+//------------------
 extern "C" {
 
 struct error
@@ -33,8 +35,9 @@ const char* error_get_string(error_t_ error)
 
 }  // End of extern "C"
 
+//--------------------
 // --- C++ linkage ---
-
+//--------------------
 template <typename Fn>
 bool translateExceptions(error_t_* out_error, Fn&& fn)
 {
@@ -75,6 +78,9 @@ struct board
     storyboard::Storyboard actual;
 };
 
+//------------------
+// --- C linkage ---
+//------------------
 extern "C" {
 note_t note_construct(const char* title, const char* text, const char* tags[], int32_t nr_tags, error_t_* out_error)
 {
