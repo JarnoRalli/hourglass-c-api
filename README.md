@@ -1,4 +1,4 @@
-![Linux](https://github.com/JarnoRalli/hourglass-c-api/actions/workflows/ubuntu_build.yml/badge.svg)   ![Windows](https://github.com/JarnoRalli/hourglass-c-api/actions/workflows/visual_studio_build.yml/badge.svg)   ![Code style](https://github.com/JarnoRalli/hourglass-c-api/actions/workflows/code_style.yml/badge.svg)
+[![Code Style](https://github.com/JarnoRalli/hourglass-c-api/actions/workflows/code_style.yml/badge.svg?branch=main&event=push)](https://github.com/JarnoRalli/hourglass-c-api/actions/workflows/code_style.yml)   [![Ubuntu-build](https://github.com/JarnoRalli/hourglass-c-api/actions/workflows/ubuntu_build.yml/badge.svg?branch=main&event=push)](https://github.com/JarnoRalli/hourglass-c-api/actions/workflows/ubuntu_build.yml)   [![Visual-studio-build](https://github.com/JarnoRalli/hourglass-c-api/actions/workflows/visual_studio_build.yml/badge.svg?branch=main&event=push)](https://github.com/JarnoRalli/hourglass-c-api/actions/workflows/visual_studio_build.yml)
 
 # 1 Hourglass C API for C++ Library
 
